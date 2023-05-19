@@ -25,7 +25,7 @@ According to word existance in **Turkish Database** user increases score or rece
    - This application uses a Turkish Database (not all words in Turkish language) 
 
 ### To Do 
-  - [] Write Unit Tests
-  - [] Write UI Tests
-  - [] Add Language Support
+  - [ ] Write Unit Tests
+  - [ ] Write UI Tests
+  - [ ] Add Language Support
  
