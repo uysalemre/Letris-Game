@@ -19,21 +19,21 @@ import androidx.compose.material.icons.sharp.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.eu.letris.ui.model.LetterModel
 import com.eu.letris.ui.theme.*
-import com.eu.letris.ui.model.Letter
 import com.eu.letris.ui.util.isVowel
 
 @Composable
 fun LetterItem(
-    letter: Letter,
+    letter: LetterModel,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -42,8 +42,8 @@ fun LetterItem(
         modifier = modifier
             .width(48.dp)
             .height(48.dp)
-            .background(if (letter.isSelected) White else letter.backgroundColor, shape)
-            .border(BorderStroke(2.dp, letter.backgroundColor), shape = shape)
+            .background(if (letter.isSelected) White else Color(letter.backgroundColor), shape)
+            .border(BorderStroke(2.dp, Color(letter.backgroundColor)), shape = shape)
             .clickable { if (letter.character != 'X') onClick() },
         contentAlignment = Alignment.Center
     ) {
@@ -52,7 +52,7 @@ fun LetterItem(
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentHeight(align = Alignment.CenterVertically),
-            color = if (letter.isSelected) letter.backgroundColor else White,
+            color = if (letter.isSelected) Color(letter.backgroundColor) else White,
             style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
             textAlign = TextAlign.Center
         )
@@ -170,13 +170,13 @@ fun PointContainer(totalPoints: Int, errorCount: Int, modifier: Modifier = Modif
 
 @Composable
 fun GameContainer(
-    data: List<List<Letter>>,
+    data: List<List<LetterModel>>,
     onItemClick: (listIndex: Int, itemIndex: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier.fillMaxSize(),
-        verticalAlignment = Alignment.Bottom,
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         data.forEachIndexed { index, letters ->
@@ -192,31 +192,10 @@ fun GameContainer(
                     LetterItem(
                         letter = item,
                         onClick = { onItemClick(index, itemIndex) },
-                        modifier = Modifier
-                            .padding(1.dp)
+                        modifier = Modifier.padding(1.dp)
                     )
                 }
             }
         }
-    }
-}
-
-@Composable
-@Preview(showBackground = true, backgroundColor = 0x80A3A3A3, widthDp = 400)
-fun LetterItemPreview() {
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-        LetterItem(
-            letter = Letter('B', ColorB, 1, false),
-            onClick = { /*TODO*/ })
-        LetterItem(
-            letter = Letter('A', ColorB, 1, false),
-            onClick = { /*TODO*/ })
-
-        IconifiedActionButton(isConfirmationButton = true, onButtonClick = { })
-        IconifiedActionButton(isConfirmationButton = false, onButtonClick = { })
-
-        ConfirmationLine(onConfirmClick = { }, onDeleteClick = { }, "LETRISGAME")
-
-        PointContainer(totalPoints = 10000, 2)
     }
 }

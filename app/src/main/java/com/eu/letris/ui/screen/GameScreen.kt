@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,19 +23,16 @@ import com.eu.letris.ui.component.IconifiedActionButton
 import com.eu.letris.ui.component.PointContainer
 import com.eu.letris.ui.theme.WordBackgroundColor
 import com.eu.letris.ui.util.toWord
-import com.eu.letris.ui.viewmodel.MainViewModel
+import com.eu.letris.ui.viewmodel.GameViewModel
 
 @Composable
 fun GameScreen(
     onGameFinished: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = hiltViewModel(),
+    viewModel: GameViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.gameItemList.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) {
-        viewModel.startGame()
-    }
+    val gamingState by viewModel.gamingState.collectAsStateWithLifecycle()
+    val selectedLetterState by viewModel.selectedLetterState.collectAsStateWithLifecycle()
 
     BackHandler {
         viewModel.endGame()
@@ -48,11 +44,11 @@ fun GameScreen(
         verticalArrangement = Arrangement.spacedBy(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (uiState.isGameFinished) {
+        if (gamingState.isGameFinished) {
             AlertDialog(
                 title = {
                     Text(
-                        text = "Oyun Bitti 😞",
+                        text = "THE END 😞",
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
                         color = WordBackgroundColor,
@@ -62,7 +58,7 @@ fun GameScreen(
                 },
                 text = {
                     Text(
-                        text = "Skor tablosunu kontrol etmeyi unutma 🏆",
+                        text = "CHECK SCORE TABLE 🏆",
                         fontSize = 16.sp,
                         textAlign = TextAlign.Start,
                         color = WordBackgroundColor,
@@ -86,27 +82,28 @@ fun GameScreen(
                 )
             )
         }
-        PointContainer(totalPoints = uiState.totalPoints, uiState.errorCount)
+        PointContainer(totalPoints = gamingState.totalPoints, gamingState.errorCount)
         GameContainer(
-            data = uiState.data,
+            data = gamingState.data,
             onItemClick = { listIndex, itemIndex ->
-                viewModel.selectItem(
+                viewModel.selectUnselectItem(
                     listIndex,
                     itemIndex
                 )
             },
             modifier = Modifier.weight(1f)
         )
+
         ConfirmationLine(
             onConfirmClick = {
-                if (uiState.selectedCharacterList.isNotEmpty() && uiState.selectedCharacterList.size >= 3)
+                if (selectedLetterState.data.isNotEmpty() && selectedLetterState.data.size >= 3)
                     viewModel.checkWordFromDb()
             },
             onDeleteClick = {
-                if (uiState.selectedCharacterList.isNotEmpty())
-                    viewModel.deleteSelectedItems()
+                if (selectedLetterState.data.isNotEmpty())
+                    viewModel.unSelectAllItems()
             },
-            word = uiState.selectedCharacterList.toWord()
+            word = selectedLetterState.data.toWord()
         )
     }
 }

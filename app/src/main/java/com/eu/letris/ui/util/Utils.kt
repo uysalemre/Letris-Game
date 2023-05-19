@@ -1,24 +1,23 @@
 package com.eu.letris.ui.util
 
-import android.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import com.eu.letris.ui.model.SelectedLetter
+import com.eu.letris.ui.model.SelectedLetterModel
 
-fun Char.isVowel() = arrayOf('A', 'E', 'I', 'İ', 'O', 'Ö', 'U', 'Ü').find { this == it } != null
+fun Char.isVowel() = arrayOf('A', 'E', 'I', 'İ', 'O', 'Ö', 'U', 'Ü').contains(this)
 
-fun List<SelectedLetter>.toWord(): String {
+fun List<SelectedLetterModel>.toWord(): String {
     return this.map {
-        it.letter.character
+        it.letter
     }.joinToString(separator = "")
 }
 
-fun List<SelectedLetter>.calculatePoint(): Int {
-    return this.sumOf { it.letter.point }
+fun List<SelectedLetterModel>.calculatePoint(): Int {
+    return this.sumOf { it.point }
 }
 
 @Composable

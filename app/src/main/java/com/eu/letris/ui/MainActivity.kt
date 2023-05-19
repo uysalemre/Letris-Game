@@ -21,7 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.eu.letris.R
-import com.eu.letris.ui.navigation.Screen
+import com.eu.letris.ui.navigation.NavigationScreen
 import com.eu.letris.ui.screen.GameScreen
 import com.eu.letris.ui.screen.LandingScreen
 import com.eu.letris.ui.screen.ScoreScreen
@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
                 Box(modifier = Modifier.fillMaxSize()) {
                     Image(
                         painter = painterResource(id = R.drawable.app_background),
-                        contentDescription = "",
+                        contentDescription = getString(R.string.content_description),
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.FillBounds
                     )
@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
     fun AppNavHost(
         modifier: Modifier = Modifier,
         navController: NavHostController = rememberNavController(),
-        startDestination: String = Screen.LandingScreen.route
+        startDestination: String = NavigationScreen.LandingScreen.route
     ) {
         var isMusicEnabled by rememberSaveable {
             mutableStateOf(false)
@@ -87,18 +87,18 @@ class MainActivity : ComponentActivity() {
             navController = navController,
             startDestination = startDestination
         ) {
-            composable(Screen.LandingScreen.route) {
+            composable(NavigationScreen.LandingScreen.route) {
                 LandingScreen(
                     onMusicBtnClick = { isMusicEnabled = !isMusicEnabled },
-                    onGameBtnClick = { navController.navigate(Screen.GameScreen.route) },
-                    onScoreBtnClick = { navController.navigate(Screen.ScoreScreen.route) },
+                    onGameBtnClick = { navController.navigate(NavigationScreen.GameScreen.route) },
+                    onScoreBtnClick = { navController.navigate(NavigationScreen.ScoreScreen.route) },
                     isMusicEnabled = isMusicEnabled
                 )
             }
-            composable(Screen.GameScreen.route) {
+            composable(NavigationScreen.GameScreen.route) {
                 GameScreen(onGameFinished = { navController.navigateUp() })
             }
-            composable(Screen.ScoreScreen.route) {
+            composable(NavigationScreen.ScoreScreen.route) {
                 ScoreScreen()
             }
         }

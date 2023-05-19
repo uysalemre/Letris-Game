@@ -9,8 +9,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,18 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.eu.letris.ui.viewmodel.MainViewModel
 import com.eu.letris.ui.theme.ColorError
 import com.eu.letris.ui.theme.White
 import com.eu.letris.ui.theme.WordBackgroundColor
+import com.eu.letris.ui.viewmodel.ScoresViewModel
 
 @Composable
-fun ScoreScreen(modifier: Modifier = Modifier, mainViewModel: MainViewModel = hiltViewModel()) {
-    val uiState by mainViewModel.gameItemList.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) {
-        mainViewModel.getBestScores()
-    }
+fun ScoreScreen(modifier: Modifier = Modifier, scoresViewModel: ScoresViewModel = hiltViewModel()) {
+    val scores by scoresViewModel.scoresState.collectAsStateWithLifecycle()
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -40,7 +34,7 @@ fun ScoreScreen(modifier: Modifier = Modifier, mainViewModel: MainViewModel = hi
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "🏆 Skor Tablosu 🏆",
+            text = "🏆 BEST SCORES 🏆",
             fontSize = 26.sp,
             textAlign = TextAlign.Center,
             color = WordBackgroundColor,
@@ -57,7 +51,7 @@ fun ScoreScreen(modifier: Modifier = Modifier, mainViewModel: MainViewModel = hi
             verticalArrangement = Arrangement.spacedBy(10.dp),
             userScrollEnabled = true
         ) {
-            itemsIndexed(uiState.bestScores) { index, item ->
+            itemsIndexed(scores) { index, item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()

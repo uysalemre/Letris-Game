@@ -1,18 +1,11 @@
-package com.eu.letris.data
+package com.eu.letris.data.scores
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class MainRepository @Inject constructor(
-    private val wordsDatabase: WordsDatabase,
-    private val scoresDatabase: ScoresDatabase
-) {
-    suspend fun checkWordIsExists(word: String) = flow {
-        emit(wordsDatabase.wordsDao().checkWord(word))
-    }.flowOn(Dispatchers.IO)
-
+class ScoresRepository @Inject constructor(private val scoresDatabase: ScoresDatabase) {
     suspend fun addPoint(point: Int) = flow {
         emit(scoresDatabase.scoresDao().addScore(ScoreEntity(score = point)))
     }.flowOn(Dispatchers.IO)

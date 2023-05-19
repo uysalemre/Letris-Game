@@ -2,8 +2,8 @@ package com.eu.letris.di
 
 import android.content.Context
 import androidx.room.Room
-import com.eu.letris.data.ScoresDatabase
-import com.eu.letris.data.WordsDatabase
+import com.eu.letris.data.scores.ScoresDatabase
+import com.eu.letris.data.words.WordsDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
